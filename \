@@ -1,0 +1,98 @@
+var port, tabs;
+/* To-Do: ( ) Adjust Timing according to YT Video [getElementByTagname('video').getCurrentTime()]
+*/
+var state = {
+	bpm: undefined,	//bpm of the song
+	bpmArtist: undefined,	//title of the song, from which the bpm is taken
+	bpmTitle: undefined,	//title of the song, from which the bpm is taken
+	running: false,	//metronome running state
+	loading: true,	//UI loading state
+	error: undefined,
+	keyString: undefined, //string containing a key (e.g. 'C Minor')
+	timeSig: undefined //the signature is `timeSig`/4
+};
+
+console.log('CScript Running!');
+
+
+function init() {
+	const metro = new MetronomeSound('audio/', ['Low_Woodblock.wav']);
+	const vid = document.getElementsByTagName('video')[0];
+
+	//Extract video title from HTML
+	try {
+		state.title = document.querySelector("#container > h1 > yt-formatted-string").innerHTML;
+	} catch {
+		throw new Error("Could not retrieve the Video title"); 
+		//To-Do: send message back to popup, notify me (yt might've changed)
+	}
+
+
+	//Query BPM
+	queryBPM(state.title).then(queryRes => {
+		state.loading = false;
+
+		//Save query results to state
+		state.bpm = Math.round(queryRes.tempo);
+		state.bpmArtist = queryRes.artist;
+		state.bpmTitle = queryRes.title;
+		state.keyString = keyToString(queryRes.key, queryRes.mode);
+		state.timeSig = queryRes.time_signature;
+
+		//Start metronome if query returned a bpm
+		if (state.bpm){
+			metro.setTempo(state.bpm);
+			metro.setSound(1);
+			startMetro();
+			state.running = metro.running; //Warning: might need to be relocated into MetronomeSound class
+		}
+
+		//Send current state back to pop-up 
+		sendState();
+	}).catch(err => {
+		//Send error message back to UI	
+		state.error = err.message;
+		sendState();
+	});
+}
+
+chrome.runtime.onConnect.addListener(function(_port) {
+	port = _port;
+	init();
+	// All connections that aren't first, will instantly get a message with the up-to-date state.
+	if (port.name != 'first_time_conn') {
+		port.postMessage(state);
+	};
+	port.onMessage.addListener((msg) => {
+		switch (msg.action) {
+			case STOP_METRO:
+				metro.stop();
+				break;
+			case START_METRO:
+				startMetro();
+				break;
+		}
+	});
+	port.onDisconnect.addListener((_port) => {
+		port = null;
+	});
+});
+function startMetro() {
+	if (isNaN(state.bpm)) return;
+
+	let t = Math.round(vid.currentTime * 1000); //current video time
+	let beatPeriod = 60 * 1000/state.bpm; //how many ms are inbetween beats
+	let startTime = t - (t % beatPeriod) + beatPeriod;
+	let msToStart = startTime - t;
+
+	window.setTimeout(() => {
+		metro.start();
+	}, msToStart);
+}
+function sendState() {
+	if (port) {
+		port.postMessage(state);
+	} else {
+		console.error('Port not defined.');
+	}
+}

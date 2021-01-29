@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="popup.css">
+        <link href="https://fonts.googleapis.com/css?family=Cantarell:400,700|Sen:400,700&display=swap" rel="stylesheet">
+	</head>
+	<body> 
+        <div id="bodyOverlay" class="overlay"></div>
+		<script src="popup.js"></script>
+        
+        <!-- Spinner View !-->
+		<div id="spinner" class="lds-ripple"><div></div><div></div>
+      <span id="loadingMsg" class="loading-msg"></span>
+    </div>
+        
+        <!-- Bpm Error View !-->
+        <div id="bpmErrorCon" class="bpm-error-con">
+            <p>We couldn't find a tempo for <span class="bpm-error-song"id="bpmErrorSong"></span>...</p>
+            <div class="error-prompts-con">
+                <div class="input-con">
+                    <span id="bpmErrorPrompt" class="link">Input bpm manually</span>
+                    <input id="bpmErrorInput" type="number" maxlength="3" class="bpm-error-input zero-input fat" tabindex="-1">
+                    <span id="bpmErrorButton" class="bpm-error-btn emoji-btn rock-btn nofadein"> </span>
+                </div>
+
+
+                <div class="input-con title-input-con">
+                    <span id="titleErrorPrompt" class="link">Input a different song title</span>
+                    <textarea id="titleErrorInput" type="text" maxlength="50" class="title-error-input zero-input" tabindex="-1"></textarea>
+                    <span id="titleErrorButton" class="title-error-btn emoji-btn search-btn"> </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main View !-->
+        <span id="con">
+            <div id="navCon" class="nav-con">
+                <span id="navButton" class='nav-button'></span>
+                <div class="nav">
+                    <div id="followVidInput" class="nav-item">
+                        <span class="nav-item-text">
+                            Follow video 
+                            <br>
+                            <span class="nav-item-text-small">
+                                Play with video and account for skipping/loading.
+                            </span>
+                        </span>
+                        <input id="followVidCheckbox"  class="follow-vid-checkbox" type="checkbox"/>
+                    </div>
+                    <div id="autoSyncInput" class="nav-item">
+                        <span class="nav-item-text">
+                            Auto-Sync
+                            <br>
+                            <span class="nav-item-text-small">
+                                Try to sync to the beat. Works for simple rhythms.
+                            </span>
+                        </span>
+                        <input id="autoSyncCheckbox"  class="follow-vid-checkbox" type="checkbox"/>
+                    </div>
+                    <div id="creditsNavItem" class="nav-item">Credits</div>
+                </div>
+            </div>
+			<span id="playBtn" class="playpause">
+				<input id="playpause" type="checkbox" value="None" name="check" />
+			    <label for="playpause"></label>
+			</span>
+			<div id="bpmCon" class="bpm-con fat">
+                <span class="bpm-input-con">
+                    <span id="bpmTapper" class="bpm-tapper"></span>
+                    <input id="bpm" type="number" maxlength="3" class="bpm zero-input fat">
+                    <span id="bpmOverlay" class="bpm-input-con-overlay"></span>
+                </span>
+                <!--<span id="bpm" class="bpm"></span> !-->
+				<span id="bpmLabel" class="bpm-label">
+                    bpm
+                    <span id="submitNewBPMButton" class="bpm-button emoji-btn rock-btn nofadein"> </span>
+                </span>
+                <div id="restoreButtonArea" class="restore-icon-bg"> 
+                    <div id="restoreButton" title="Restore intial state" class="restore-icon" >
+                    </div>								
+                </div>
+			</div>
+            
+            <div id="songTextCon" class="con-text-con">
+                <div id="songText" class="song-title"></div>
+                <div id="keyText" class="song-key"></div>
+            </div>
+            <span id="wrongSongPrompt" class="bpm-wrong-prompt link">
+                Wrong song?
+            </span>
+		</span>
+
+        <!-- Custom Song Title View !-->  
+        <div id="customSongCon" class="bpm-error-con">
+            <p>Type a song title below.</p>
+
+            <div class="error-prompts-con input-con title-input-con">
+                <input id="newTitleInput" type="text" maxlength="50" class="title-error-input zero-input" tabindex="-1">
+                <span id="submitNewTitleButton" class="title-error-btn emoji-btn search-btn"> </span>
+            </div>
+        </div>
+        
+        <!-- Credits View -->
+        <div id="creditsCon" class="credits-con">
+            <div class="credits-all">
+                <div class="credits-icons">
+                   <span class="credits-cat">Icons: </span>
+                   <span>
+                       <div>
+                           <a href="https://www.flaticon.com/authors/those-icons" title="Those Icons" target="_blank">Those Icons</a> (<a href="https://www.flaticon.com/" title="Flaticon" target="_blank">flaticon.com</a>),
+
+                       </div>
+                       <div>
+                           <a href="https://material.io/resources/icons/?style=baseline" target="_blank">material.io/resources/icons</a>
+                       </div>
+                   </span>
+                </div>
+                <div class="credits-emojis">
+                    <span class="credits-cat">Emojis: </span>
+                    <a href="https://openmoji.org/" title="OpenMoji" target="_blank">OpenMoji</a>
+                </div>
+                <div class="credits-data">
+                    <span class="credits-cat">Data: </span>
+                    <a href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/" title="Spotify Web API" target="_blank">Spotify Web API</a>
+                </div>
+            </div> 
+
+            <div class="credits-me">
+                <div style="font-size:14px;">Everything else</div>
+                <div>
+                    <a href="https://andreev.work" title="My Website: andreev.work" target="_blank">Mikhail Andreev</a>
+                    <div>andreemic@gmail.com</div>
+            </div>
+            </div>
+        </div>
+
+      <!-- Error View !-->
+      <div id="errorMsg" class="error-msg">Something went wrong...</div>
+
+      <!-- Short Message !-->
+      <div id="shortMsg" class="short-msg"></div>
+	</body>
+</html>
+

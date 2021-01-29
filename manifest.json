@@ -1,0 +1,28 @@
+  {
+    "name": "Youtube Metronome",
+    "version": "0.1.1",
+    "description": "Play a metronome along to music videos on YouTube.",
+    "permissions": ["declarativeContent", "activeTab"],
+    "web_accessible_resources": [
+        "audio/*.wav"
+    ],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+    "page_action": {
+	    "default_popup": "src/popup/popup.html",
+	    "default_icon": {
+		    "16": "images/metronome16.png",
+            "24": "images/metronome24.png",
+            "32": "images/metronome32.png"
+	    }
+    },
+    "icons": {
+	    "16": "images/metronome16.png",
+        "48": "images/metronome48.png",
+        "128": "images/metronome128.png"
+    },
+    "manifest_version": 2
+  }
+
